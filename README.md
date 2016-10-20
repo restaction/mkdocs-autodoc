@@ -1,2 +1,3 @@
 # mkdocs-autodoc
-mkdocs-autodoc -> sphinx.ext.autodoc
+
+Auto generate API document in MKDocs

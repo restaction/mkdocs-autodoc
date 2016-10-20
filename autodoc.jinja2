@@ -1,0 +1,25 @@
+{% for item in contents %}
+<section id="{{ loop.index0 }}">
+  {{ item["desc"] }}
+  {% for key in item["meta"] %}
+    {% if item["meta"][key] %}
+    {{ key }}:
+    <pre>
+      {{ item["meta"][key] }}
+    </pre>
+    {% endif %}
+  {% endfor %}
+  {% for routine in item["routines"] %}
+    <h2>{{ routine["signature"] }}</h2>
+    {{ routine["desc"] }}
+    {% for key in routine["meta"] %}
+      {% if routine["meta"][key] %}
+      {{ key }}
+      <pre>
+        {{ routine["meta"][key] }}
+      </pre>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+</section>
+{% endfor %}
