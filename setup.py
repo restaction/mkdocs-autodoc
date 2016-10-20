@@ -9,7 +9,10 @@ setup(
     author="guyskk",
     author_email="guyskk@qq.com",
     keywords=["mkdocs"],
-    py_module=["mkdocs_autodoc.py"],
+    packages=["mkdocs_autodoc"],
+    package_data={
+        "mkdocs_autodoc": ["autodoc.jinja2"]
+    },
     include_package_data=True,
     entry_points={
         "mkdocs.themes": [
