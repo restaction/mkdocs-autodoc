@@ -1,25 +1,41 @@
+<style>
+  dd {margin-left: 2em;}
+</style>
 {% for item in contents %}
-<section id="{{ loop.index0 }}">
+<h2 id="{{ loop.index0 }}">{{ item["title"] }}</h2>
+<dl >
+  <dt>
+    <b>{{ item["signature"] }}</b>
+  </dt>
+  <dd>
   {{ item["desc"] }}
   {% for key in item["meta"] %}
     {% if item["meta"][key] %}
-    {{ key }}:
-    <pre>
-      {{ item["meta"][key] }}
-    </pre>
+    <dl>
+      <dt><b>{{ key }}:</b></dt>
+      <dd>{{ item["meta"][key] }}</dd>
+    </dl>
     {% endif %}
   {% endfor %}
   {% for routine in item["routines"] %}
-    <h2>{{ routine["signature"] }}</h2>
-    {{ routine["desc"] }}
-    {% for key in routine["meta"] %}
-      {% if routine["meta"][key] %}
-      {{ key }}
-      <pre>
-        {{ routine["meta"][key] }}
-      </pre>
-      {% endif %}
-    {% endfor %}
+    <dl>
+      <dt>
+        <b>{{ routine["signature"] }}</b>
+      </dt>
+      <dd>
+        <p>{{ routine["title"] }}</p>
+        {{ routine["desc"] }}
+        {% for key in routine["meta"] %}
+          {% if routine["meta"][key] %}
+          <dl>
+            <dt><b>{{ key }}:</b></dt>
+            <dd>{{ routine["meta"][key] }}</dd>
+          </dl>
+          {% endif %}
+        {% endfor %}
+      </dd>
+    </dl>
   {% endfor %}
-</section>
+  </dd>
+</dl>
 {% endfor %}

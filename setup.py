@@ -9,11 +9,11 @@ setup(
     author="guyskk",
     author_email="guyskk@qq.com",
     keywords=["mkdocs"],
-    py_module=["autodoc.py"],
+    py_module=["mkdocs_autodoc.py"],
     include_package_data=True,
     entry_points={
         "mkdocs.themes": [
-            "autodoc = autodoc",
+            "autodoc = mkdocs_autodoc",
         ]
     },
     zip_safe=False
