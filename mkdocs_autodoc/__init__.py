@@ -16,6 +16,14 @@ _build_page = build._build_page
 AUTODOC_MARK = ".autodoc"
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "autodoc.jinja2")
 
+# hack
+import pip
+from pprint import pprint
+pprint(sorted([
+    "%s==%s" % (i.key, i.version)
+    for i in pip.get_installed_distributions()
+]))
+
 
 def create_toc(titles):
     """
