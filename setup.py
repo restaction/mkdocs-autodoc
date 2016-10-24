@@ -10,7 +10,7 @@ setup(
     author_email="guyskk@qq.com",
     keywords=["mkdocs"],
     packages=["mkdocs_autodoc"],
-    pymodules=["magicpatch"],
+    py_modules=["magicpatch"],
     package_data={
         "mkdocs_autodoc": ["autodoc.jinja2"]
     },
