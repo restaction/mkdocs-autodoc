@@ -17,14 +17,6 @@ from magicpatch import patch
 AUTODOC_MARK = ".autodoc"
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "autodoc.jinja2")
 
-# hack
-import pip
-from pprint import pprint
-pprint(sorted([
-    "%s==%s" % (i.key, i.version)
-    for i in pip.get_installed_distributions()
-]))
-
 
 def create_toc(titles):
     """
@@ -98,61 +90,3 @@ def patched_build(f, config, *args, **kwargs):
     for k in ["theme", "theme_dir"]:
         config[k] = real_config[k]
     return f(config, *args, **kwargs)
-
-
-# ---------------------------------------------------------------------
-#                               Demo                                  |
-# ---------------------------------------------------------------------
-
-
-class Demo:
-    """
-    A demo of mkdocs-autodoc
-
-    Long description description description description description
-    description description description description description description
-    description description description description description description
-
-    Usage:
-
-        demo = Demo(title="demo")
-        demo.set("hello world")
-        print(demo.get)
-
-    Attributes:
-        title: demo title
-
-        eg:
-
-            title = "demo"
-    Args:
-        hahaha
-        hahah
-    """
-
-    def __init__(self, title):
-        """
-        Init demo
-
-        Args:
-            title: demo title
-        """
-        self.title = title
-
-    def set(self, title):
-        """
-        Set demo title
-
-        Args:
-            title: demo title
-        """
-        self.title = title
-
-    def get(self):
-        """
-        Get demo title
-
-        Returns:
-            title: demo title
-        """
-        return self.title
