@@ -110,22 +110,16 @@ def get_signature(obj):
     """
     name = obj.__name__
     if inspect.isclass(obj):
-        name = pydoc.classname(obj, None)
-        init = getattr(obj, '__init__')
-        if init:
-            signature = pydoc.plaintext\
-                .docroutine(init).split('\n', maxsplit=1)[0]
-            signature = signature[len("__init__(self, "):-1]
-            signature = "class %s(%s)" % (name, signature)
+        if hasattr(obj, "__init__"):
+            signature = str(inspect.signature(obj.__init__))
+            return "class %s%s" % (name, signature)
         else:
             signature = "%s()" % name
     elif inspect.ismodule(obj):
         signature = name
     else:
-        signature = pydoc.plaintext\
-            .docroutine(obj).split('\n', maxsplit=1)[0]
-        if inspect.ismethod(obj):
-            signature = signature.replace("(self, ", "(")
+        signature = str(inspect.signature(obj))
+        return name + signature
     return signature
 
 
@@ -168,11 +162,16 @@ def parse_module_or_class(obj):
             }
     """
     def predicate(x):
-        if inspect.isroutine(x):
-            if x.__name__.startswith("_"):
-                return False
-            return True
-        return False
+        # exclude not routines
+        if not inspect.isroutine(x):
+            return False
+        # exclude private and special
+        if x.__name__.startswith("_"):
+            return False
+        # exclude routines not defined in the module
+        if inspect.ismodule(obj) and inspect.getmodule(x) != obj:
+            return False
+        return True
     routines = inspect.getmembers(obj, predicate)
     title, desc, meta = parse_doc(inspect.getdoc(obj))
     parsed = [parse_routine(obj) for name, obj in routines]
@@ -185,6 +184,16 @@ def parse_module_or_class(obj):
     }
 
 
+def get_name(obj):
+    """
+    Get the name of object
+    """
+    if inspect.isclass(obj):
+        name = pydoc.classname(obj, None)
+    name = obj.__name__
+    return name.rsplit(".", maxsplit=1)[-1]
+
+
 def parse_selected(text):
     """
     Parse selected module and class
@@ -195,7 +204,7 @@ def parse_selected(text):
     titles = []
     contents = []
     for obj in load_selected(text):
-        titles.append(obj.__name__)
+        titles.append(get_name(obj))
         item = parse_module_or_class(obj)
         contents.append(item)
     return contents, titles
