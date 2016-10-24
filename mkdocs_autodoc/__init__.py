@@ -7,12 +7,13 @@ Doc strings should follow Google Python Style, otherwise will not well parsed.
 import io
 import os
 from mkdocs import utils
+from mkdocs.config import load_config
 from mkdocs.commands import build
 from mkdocs.commands.build import log, get_global_context, get_page_context
 from mkdocs.toc import TableOfContents, AnchorLink
 from mkdocs_autodoc.autodoc import parse_selected
+from magicpatch import patch
 
-_build_page = build._build_page
 AUTODOC_MARK = ".autodoc"
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "autodoc.jinja2")
 
@@ -80,16 +81,23 @@ def build_autodoc(page, config, site_navigation, env, dump_json, dirty=False):
     return html_content, table_of_contents, None
 
 
-def build_page(page, *args, **kwargs):
+@patch(build._build_page)
+def build_page(f, page, *args, **kwargs):
     """
     A patch of mkdocs.commands.build._build_page
     """
     if page.input_path.endswith(AUTODOC_MARK):
         return build_autodoc(page, *args, **kwargs)
-    return _build_page(page, *args, **kwargs)
+    return f(page, *args, **kwargs)
 
-# patch mkdocs
-build._build_page = build_page
+
+@patch(build.build)
+def patched_build(f, config, *args, **kwargs):
+    print("HACK".center(60, "-"))
+    real_config = load_config(config_file=None)
+    for k in ["theme", "theme_dir"]:
+        config[k] = real_config[k]
+    return f(config, *args, **kwargs)
 
 
 # ---------------------------------------------------------------------
