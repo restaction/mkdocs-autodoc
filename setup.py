@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="mkdocs-autodoc",
-    version="0.1.1",
+    version="0.1.2",
     url="https://github.com/restaction/mkdocs-autodoc",
     license="MIT",
     description="Auto generate API document in MKDocs",
