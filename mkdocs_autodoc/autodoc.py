@@ -6,8 +6,9 @@ Some useful functions for parsing doc string of modules.
 import importlib
 import inspect
 import pydoc
-import markdown
+from markdown import markdown
 
+EXTENSIONS = ['nl2br', 'tables', 'fenced_code']
 DOC_STRING_MARKS = ["Args", "Returns", "Yields", "Raises", "Attributes"]
 
 
@@ -48,7 +49,8 @@ def parse_meta(meta):
     for section in meta:
         mark, content = section.split("\n", maxsplit=1)
         mark = mark.strip("\n:")
-        parsed[mark] = markdown.markdown(inspect.cleandoc(content))
+        parsed[mark] = markdown(
+            inspect.cleandoc(content), extensions=EXTENSIONS)
     return parsed
 
 
@@ -96,7 +98,7 @@ def parse_doc(doc):
         A tuple of title, desc, meta.
     """
     title, desc, meta = split_doc(doc)
-    desc = markdown.markdown(desc)
+    desc = markdown(desc, extensions=EXTENSIONS)
     meta = parse_meta(meta)
     return title, desc, meta
 
